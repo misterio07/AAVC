@@ -51,7 +51,9 @@ const fetchPlayerDetails = async (position) => {
 
 // Servir archivos estáticos (como el archivo HTML)
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.get('/jugadores', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
 app.get('api/jugadores', async (req, res) => {
     const players = await Promise.all(playerPositions.map(pos => fetchPlayerDetails(pos)));
     const validPlayers = players.filter(player => player !== null);
