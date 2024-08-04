@@ -57,13 +57,18 @@ app.get('/jugadores', (req, res) => {
 });
 
 app.get('/api/jugadores', async (req, res) => {
-    const players = await Promise.all(playerPositions.map(pos => fetchPlayerDetails(pos)));
-    const validPlayers = players.filter(player => player !== null);
+    try {
+        const players = await Promise.all(playerPositions.map(pos => fetchPlayerDetails(pos)));
+        const validPlayers = players.filter(player => player !== null);
 
-    // Ordenar por puesto, convirtiendo la cadena a número entero para comparación
-    validPlayers.sort((a, b) => parseInt(a.position, 10) - parseInt(b.position, 10));
+        // Ordenar por puesto, convirtiendo la cadena a número entero para comparación
+        validPlayers.sort((a, b) => parseInt(a.position, 10) - parseInt(b.position, 10));
 
-    res.json(validPlayers);
+        res.json(validPlayers);
+    } catch (error) {
+        console.error('Error fetching players:', error);
+        res.status(500).json({ error: 'Error fetching players' });
+    }
 });
 app.listen(port, () => {
     console.log(`Servidor escuchando en http://localhost:${port}`);
