@@ -89,7 +89,7 @@
         // Función para obtener y mostrar los datos de jugadores
         async function fetchPlayers() {
             try {
-                const response = await fetch('api/jugadores');
+                const response = await fetch('/api/jugadores');
                 const players = await response.json();
                 const tableBody = document.querySelector('#playersTable tbody');
 
