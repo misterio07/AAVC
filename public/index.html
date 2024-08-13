@@ -5,79 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AAVC</title>
     <style>
-        
-        
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: white; /* Azul claro de fondo */
+            margin: 5%;
+            background-color: white;
         }
         h1 {
-
             text-align: center;
-            color: black; /* Azul oscuro para el título */
+            color: black;
         }
-        
         table {
             width: 100%;
             border-collapse: collapse;
-            background-color: #ffffff; /* Blanco para la tabla */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 50px;
         }
         th, td {
-            border: 1px solid #cccccc; /* Gris claro para bordes */
+            border: 1px solid #cccccc;
             padding: 12px;
             text-align: left;
         }
         th {
-            background-color: #003366; /* Azul oscuro para los encabezados */
-            color: #ffffff; /* Blanco para el texto en encabezados */
+            background-color: #003366;
+            color: #ffffff;
         }
         tr:nth-child(even) {
-            background-color: #e6f2ff; /* Celeste claro para filas pares */
+            background-color: #e6f2ff;
         }
         tr:nth-child(odd) {
-            background-color: #ffffff; /* Blanco para filas impares */
+            background-color: #ffffff;
         }
         caption {
             font-size: 1.5em;
             margin: 10px 0;
-            color: #003366; /* Azul oscuro para el pie de la tabla */
+            color: #003366;
         }
         .header {
             display: flex;
             align-items: center;
+            justify-content: space-between;
         }
         .header img {
-            width: 200px; /* Ajusta el tamaño de la imagen según tus necesidades */
+            width: 200px;
             height: auto;
-            margin-right: 20px; /* Espaciado entre la imagen y el título */
+            margin-right: 20px;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0 4px;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .row .gallery-icon {
+            margin: 3px;
         }
     </style>
 </head>
 <body>
+  <!---  <div>
+        <nav>
+            <a href="#">Rondas</a>
+            <a href="#">Partidas</a>
+            <a href="#">Tabla general</a>
+        </nav>
+    </div> -->
     <div class="header">
-        <img class="logo" src="https://i.servimg.com/u/f37/19/79/57/63/logo10.jpg" alt="Descripción de la imagen">
-        <h1>Asociacion de Ajedrez Villa Constitucion</h1>
+        <img class="logo" src="https://i.servimg.com/u/f37/19/79/57/63/logo10.jpg" alt="Logo">
+        <h1>Asociación de Ajedrez Villa Constitución</h1>
     </div>
-    
     <table id="playersTable">
-        <caption>Tabla posiciones local</caption>
+        <caption>Tabla de posiciones local</caption>
         <thead>
             <tr>
                 <th>Puesto</th>
-                
                 <th>Nombre</th>
-                
                 <th>Ranking Inicial</th>
-                
-                
                 <th>Elo Internacional</th>
                 <th>Puntos</th>
                 <th>Puesto</th>
                 <th>Federación</th>
-                
-                
             </tr>
         </thead>
         <tbody>
@@ -85,45 +93,117 @@
         </tbody>
     </table>
 
+    <section>
+        <h1>Filtrar Datos de Jugadores</h1>
+
+        <label for="position">Selecciona el jugador:</label>
+        <select id="position" name="position">
+            <option value="">--Selecciona un jugador--</option>
+        </select>
+        <button id="filterButton">Filtrar</button>
+
+        <h2>Resultados</h2>
+        <table id="resultTable" border="1">
+            <thead>
+                <tr>
+                    <th>Ronda</th>
+                    <th>Tablero</th>
+                    <th>Número Inicial</th>
+                    <th>Nombre</th>
+                    <th>Elo</th>
+                    <th>Federación</th>
+                    <th>Puntos</th>
+                    <th>Resultado</th>
+                   <!--  <th>K-Factor</th>
+                    <th>Cambio Elo</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas de la tabla se agregarán dinámicamente -->
+            </tbody>
+        </table>
+    </section>
+
+    <footer>
+        <!-- Footer content -->
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        // Función para obtener y mostrar los datos de jugadores..
         async function fetchPlayers() {
             try {
                 const response = await fetch('/api/jugadores');
                 const players = await response.json();
                 const tableBody = document.querySelector('#playersTable tbody');
+                const select = document.getElementById('position');
 
-                // Limpiar el cuerpo de la tabla antes de agregar nuevos datos
                 tableBody.innerHTML = '';
-                let puesto=1;
+                select.innerHTML = '<option value="">--Selecciona un jugador--</option>';
+
+                let puesto = 1;
                 players.forEach(player => {
                     const row = document.createElement('tr');
-                    
                     row.innerHTML = `
-                        <td>${puesto}</td>  
+                        <td>${puesto}</td>
                         <td>${player.name}</td>
-                        
                         <td>${player.initialRanking}</td>
-                        
-                        
                         <td>${player.internationalElo}</td>
                         <td>${player.points}</td>
                         <td>${player.position}</td>
                         <td>${player.federation}</td>
-                        
-                        
                     `;
-                    
                     tableBody.appendChild(row);
-                    puesto++
+
+                    const option = document.createElement('option');
+                    option.value = player.position;
+                    option.textContent = `${player.name} (${player.position})`;
+                    select.appendChild(option);
+
+                    puesto++;
                 });
             } catch (error) {
                 console.error('Error fetching players:', error);
             }
         }
 
-        // Llamar a la función para cargar los datos al cargar la página
         window.onload = fetchPlayers;
+
+        document.getElementById('filterButton').addEventListener('click', async () => {
+            const position = document.getElementById('position').value;
+            const resultTableBody = document.querySelector('#resultTable tbody');
+
+            if (!position) {
+                alert('Por favor, selecciona un jugador.');
+                return;
+            }
+
+            try {
+                const response = await axios.get(`/fetch-data?position=${position}`);
+                const data = response.data;
+
+                resultTableBody.innerHTML = '';
+
+                data.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${row.round}</td>
+                        <td>${row.board}</td>
+                        <td>${row.initialNo}</td>
+                        <td>${row.name}</td>
+                        <td>${row.elo}</td>
+                        <td>${row.federation}</td>
+                        <td>${row.points}</td>
+                        <td>${row.result}</td>
+                        <td>${row.kFactor}</td>
+                        <td>${row.eloChange}</td>
+                    `;
+                    resultTableBody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Error fetching table data:', error);
+                alert('Error al obtener los datos de la tabla.');
+            }
+        });
     </script>
 </body>
 </html>

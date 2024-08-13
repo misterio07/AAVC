@@ -5,51 +5,62 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Base URL de la página de resultados, con un marcador de posición para el número de jugador
-const baseUrl = 'https://chess-results.com/tnr952958.aspx?lan=2&art=9&fed=ARG&turdet=YES&flag=30&snr=';
-//https://archive.chess-results.com/tnr774957.aspx?lan=2&art=9&fed=ARG&turdet=YES&flag=30&snr=';
-
-//https://chess-results.com/tnr952958.aspx?lan=2&art=9&fed=ARG&turdet=YES&flag=30&snr='
-// Lista de posiciones de los jugadores
-const playerPositions = [76,78,87,91,92,95,97,100,101,103,110,111,113]; // Actualiza esta lista con las posiciones de jugadores que deseas consultar
-
+const baseUrl =  'https://chess-results.com/tnr952958.aspx?lan=2&art=9&fed=ARG&turdet=YES&flag=30&snr=';
+//'https://archive.chess-results.com/tnr774957.aspx?lan=2&art=9&fed=ARG&turdet=YES&flag=30&snr=';
+const playerPositions = [75, 78, 88, 93, 95, 100, 103, 106, 110, 118, 119, 120, 123];
 
 const fetchPlayerDetails = async (position) => {
     try {
         const { data } = await axios.get(`${baseUrl}${position}`);
         const $ = cheerio.load(data);
-
-        // Seleccionar la tabla con la clase "CRs1"
         const table = $('table.CRs1');
 
-        // Función para extraer datos de la tabla
-        const extractData = (label) => {
-            return table.find(`td.CR:contains(${label})`).next().text().trim();
-        };
+        const extractData = (label) => table.find(`td.CR:contains(${label})`).next().text().trim();
 
-        const player = {
+        return {
             name: extractData('Nombre'),
-            title: extractData('Título'),
             initialRanking: extractData('Ranking inicial'),
-            elo: extractData('Elo'),
-            nationalElo: extractData('Elo nacional'),
             internationalElo: extractData('Elo internacional'),
             points: extractData('Puntos'),
             position: extractData('Puesto'),
-            federation: extractData('Federación'),
-            nationalCode: extractData('Código nacional'),
-            fideCode: extractData('Código FIDE'),
-            birthYear: extractData('Fecha de nacimiento')
+            federation: extractData('Federación')
         };
-
-        return player;
     } catch (error) {
         console.error('Error fetching player details:', error);
         return null;
     }
 };
 
-// Servir archivos estáticos (como el archivo HTML)
+const fetchTableData = async (position) => {
+    try {
+        const { data } = await axios.get(`${baseUrl}${position}`);
+        const $ = cheerio.load(data);
+        const rows = $('table.CRs1 tr.CRng1, table.CRs1 tr.CRng2');
+        const tableData = [];
+
+        rows.each((index, element) => {
+            const cells = $(element).find('td');
+            tableData.push({
+                round: $(cells[0]).text().trim(),
+                board: $(cells[1]).text().trim(),
+                initialNo: $(cells[2]).text().trim(),
+                name: $(cells[4]).text().trim(),
+                elo: $(cells[5]).text().trim(),
+                federation: $(cells[6]).text().trim(),
+                points: $(cells[7]).text().trim(),
+                result: $(cells[8]).text().trim(),
+                kFactor: $(cells[9]).text().trim(),
+                eloChange: $(cells[10]).text().trim()
+            });
+        });
+
+        return tableData;
+    } catch (error) {
+        console.error('Error fetching table data:', error);
+        return [];
+    }
+};
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/jugadores', (req, res) => {
@@ -58,10 +69,9 @@ app.get('/jugadores', (req, res) => {
 
 app.get('/api/jugadores', async (req, res) => {
     try {
-        const players = await Promise.all(playerPositions.map(pos => fetchPlayerDetails(pos)));
+        const players = await Promise.all(playerPositions.map(fetchPlayerDetails));
         const validPlayers = players.filter(player => player !== null);
 
-        // Ordenar por puesto, convirtiendo la cadena a número entero para comparación
         validPlayers.sort((a, b) => parseInt(a.position, 10) - parseInt(b.position, 10));
 
         res.json(validPlayers);
@@ -70,6 +80,17 @@ app.get('/api/jugadores', async (req, res) => {
         res.status(500).json({ error: 'Error fetching players' });
     }
 });
+
+app.get('/fetch-data', async (req, res) => {
+    const position = req.query.position;
+    if (position) {
+        const tableData = await fetchTableData(position);
+        res.json(tableData);
+    } else {
+        res.status(400).json({ error: 'Invalid position' });
+    }
+});
+
 app.listen(port, () => {
     console.log(`Servidor escuchando en http://localhost:${port}`);
 });
