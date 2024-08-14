@@ -7,7 +7,7 @@ const port = process.env.PORT || 3000;
 
 const baseUrl =  'https://chess-results.com/tnr952958.aspx?lan=2&art=9&fed=ARG&turdet=YES&flag=30&snr=';
 //'https://archive.chess-results.com/tnr774957.aspx?lan=2&art=9&fed=ARG&turdet=YES&flag=30&snr=';
-const playerPositions = [71,74, 85, 90, 93, 97, 101, 104, 110,119,120,121,122, 123, 124,125,126 ];
+const playerPositions = [71,74, 85, 90, 93, 97, 101, 104, 110,119,120,121,122, 123 ];
 
 const fetchPlayerDetails = async (position) => {
     try {
