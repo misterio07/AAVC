@@ -111,8 +111,8 @@
         </select>
         <button id="filterButton">Filtrar</button>
 
-        <h2>Resultados</h2>
-        <table id="resultTable" border="1">
+        
+       <!-- <table id="resultTable" border="1">
             <thead>
                 <tr>
                     <th>Ronda</th>
@@ -123,14 +123,13 @@
                     <th>Federación</th>
                     <th>Puntos</th>
                     <th>Resultado</th>
-                   <!--  <th>K-Factor</th>
-                    <th>Cambio Elo</th> -->
+                  
                 </tr>
             </thead>
             <tbody>
-                <!-- Las filas de la tabla se agregarán dinámicamente -->
+                Las filas de la tabla se agregarán dinámicamente 
             </tbody>
-        </table>
+        </table>-->
     </section>
     <div style="margin: 50px 0px;"><hr></div>
     <footer>
@@ -206,7 +205,7 @@
         }
 
         window.onload = fetchPlayers;
-
+/*
         document.getElementById('filterButton').addEventListener('click', async () => {
             const position = document.getElementById('position').value;
             const resultTableBody = document.querySelector('#resultTable tbody');
@@ -233,8 +232,7 @@
                         <td>${row.federation}</td>
                         <td>${row.points}</td>
                         <td>${row.result}</td>
-                        <td>${row.kFactor}</td>
-                        <td>${row.eloChange}</td>
+                        
                     `;
                     resultTableBody.appendChild(tr);
                 });
@@ -243,6 +241,7 @@
                 alert('Error al obtener los datos de la tabla.');
             }
         });
+        */
     </script>
 </body>
 </html>

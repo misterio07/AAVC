@@ -7,10 +7,10 @@ const port = process.env.PORT || 3000;
 
 const baseUrl =  'https://chess-results.com/tnr952958.aspx?lan=2&art=9&fed=ARG&turdet=YES&flag=30&snr=';
 //'https://archive.chess-results.com/tnr774957.aspx?lan=2&art=9&fed=ARG&turdet=YES&flag=30&snr=';
-const playerPositions = [69,72, 83, 88, 90, 94, 98, 101, 105,114,115,116,117, 118, 119, ];
+const playerPositions = [75,78,88, 93, 96,99,105, 108, 114, 122, 123,124,125,126,127,128,129,130];
 
 const fetchPlayerDetails = async (position) => {
-    try {
+    try{
         const { data } = await axios.get(`${baseUrl}${position}`);
         const $ = cheerio.load(data);
         const table = $('table.CRs1');
