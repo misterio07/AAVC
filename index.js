@@ -95,3 +95,8 @@ app.get('/fetch-data', async (req, res) => {
 app.listen(port, () => {
     console.log(`Servidor escuchando en http://localhost:${port}`);
 });
+
+
+app.listen(port, () => {
+    console.log(`Servidor escuchando en http://localhost:${port}`);
+});
