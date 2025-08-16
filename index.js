@@ -5,13 +5,14 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
-const baseUrl =  'https://chess-results.com/tnr952958.aspx?lan=2&art=9&fed=ARG&turdet=YES&flag=30&snr=';
+const baseUrl =  'https://s3.chess-results.com/tnrWZ.aspx?lan=2&art=9&fed=ARG&turdet=YES&flag=30&snr=';
+const baseUrl1 ='&SNode=S0&tno=1178410';
 //'https://archive.chess-results.com/tnr774957.aspx?lan=2&art=9&fed=ARG&turdet=YES&flag=30&snr=';
-const playerPositions = [75,78,88, 93, 96,99,106, 109, 115, 123,124,125,126,127,128,129,130,131];
+const playerPositions = [86,85,84,83,82,81,80,79,78,75,74,73,70,69,68,64,62,58,52,39,36,];
 
 const fetchPlayerDetails = async (position) => {
     try{
-        const { data } = await axios.get(`${baseUrl}${position}`);
+        const { data } = await axios.get(`${baseUrl}${position}${baseUrl1}`);
         const $ = cheerio.load(data);
         const table = $('table.CRs1');
 
@@ -33,7 +34,7 @@ const fetchPlayerDetails = async (position) => {
 
 const fetchTableData = async (position) => {
     try {
-        const { data } = await axios.get(`${baseUrl}${position}`);
+        const { data } = await axios.get(`${baseUrl}${position}${baseUrl1}`);
         const $ = cheerio.load(data);
         const rows = $('table.CRs1 tr.CRng1, table.CRs1 tr.CRng2');
         const tableData = [];
