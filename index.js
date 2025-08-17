@@ -41,6 +41,19 @@ const fetchTableData = async (position) => {
 
         rows.each((index, element) => {
             const cells = $(element).find('td');
+
+            // la celda de resultado incluye el div con el color
+            const resultCell = $(cells[8]);
+            let color = '';
+            if (resultCell.find('.FarbewT').length) {
+                color = 'Blancas';
+            } else if (resultCell.find('.FarbesT').length) {
+                color = 'Negras';
+            }
+
+            // el resultado es el texto después del div
+            const result = resultCell.text().trim();
+
             tableData.push({
                 round: $(cells[0]).text().trim(),
                 board: $(cells[1]).text().trim(),
@@ -49,7 +62,8 @@ const fetchTableData = async (position) => {
                 elo: $(cells[5]).text().trim(),
                 federation: $(cells[6]).text().trim(),
                 points: $(cells[7]).text().trim(),
-                result: $(cells[8]).text().trim(),
+                color,   // 👈 nuevo campo
+                result,  // 👈 ya limpio
                 kFactor: $(cells[9]).text().trim(),
                 eloChange: $(cells[10]).text().trim()
             });
@@ -95,5 +109,3 @@ app.get('/fetch-data', async (req, res) => {
 app.listen(port, () => {
     console.log(`Servidor escuchando en http://localhost:${port}`);
 });
-
-

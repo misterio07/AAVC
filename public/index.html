@@ -64,6 +64,19 @@
         .row .gallery-icon {
             margin: 3px;
         }
+        .color-square {
+             display: inline-block;
+             width: 15px;
+             height: 15px;
+             border: 1px solid #333;
+             border-radius: 3px;
+        }
+        .white {
+             background-color: white;
+        }
+        .black {
+              background-color: black;
+        }
     </style>
 </head>
 <body>
@@ -113,23 +126,24 @@
 
         
        <table id="resultTable" border="1">
-            <thead>
-                <tr>
-                    <th>Ronda</th>
-                    <th>Tablero</th>
-                    <th>Número Inicial</th>
-                    <th>Nombre</th>
-                    <th>Elo</th>
-                    <th>Federación</th>
-                    <th>Puntos</th>
-                    <th>Resultado</th>
-                  
-                </tr>
-            </thead>
-            <tbody>
-                <!--Las filas de la tabla se agregarán dinámicamente -->
-            </tbody>
-        </table>
+    <thead>
+        <tr>
+            <th>Ronda</th>
+            <th>Tablero</th>
+            <th>Número Inicial</th>
+            <th>Nombre</th>
+            <th>Elo</th>
+            <th>Federación</th>
+            <th>Puntos</th>           
+            <th>Color</th> 
+            <th>Resultado</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!--Las filas de la tabla se agregarán dinámicamente -->
+    </tbody>
+</table>
+
     </section>
     <div style="margin: 50px 0px;"><hr></div>
     <footer>
@@ -231,6 +245,7 @@
                         <td>${row.elo}</td>
                         <td>${row.federation}</td>
                         <td>${row.points}</td>
+                        <td>${row.color}</td>
                         <td>${row.result}</td>
                         
                     `;
