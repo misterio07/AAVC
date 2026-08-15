@@ -5,7 +5,7 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000 ;
  ///https://s1.chess-results.com/tnr1431248.aspx?lan=2&art=9&fed=ARG&turdet=YES&snr=17&SNode=S0
-const baseUrl =  'https://s3.chess-results.com/tnrWZ.aspx?lan=2&art=9&fed=ARG&turdet=YES&flag=30&snr=';
+const baseUrl =  'https://s1.chess-results.com/tnr1431248.aspx?lan=2&art=9&fed=ARG&turdet=YES&snr=';
 const baseUrl1 ='&SNode=S0';
 //'https://archive.chess-results.com/tnr774957.aspx?lan=2&art=9&fed=ARG&turdet=YES&flag=30&snr=';
 const playerPositions = [17,20,22,27,29,30,31,35,36,37,41,45,46,47,48,49,50,53,56,59,60,61,62,63,65,66,67,68,69,70,71,72,73,74];
